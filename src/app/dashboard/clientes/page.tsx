@@ -47,7 +47,7 @@ export default async function ClientesPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              clients.map((client) => (
+              clients.map((client: any) => (
                 <TableRow key={client.id}>
                   <TableCell className="font-medium">{client.firstName} {client.lastName}</TableCell>
                   <TableCell className="hidden md:table-cell">{client.email || "N/A"}</TableCell>
