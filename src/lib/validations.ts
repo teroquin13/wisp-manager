@@ -10,7 +10,7 @@ export const ClienteSchema = z.object({
 
 export const RouterSchema = z.object({
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
-  ipAddress: z.string().regex(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/, "Debe ser una dirección IP válida"),
+  ipAddress: z.string().min(7, "Debe ser una dirección IP o DNS válido"),
   apiUser: z.string().min(1, "El usuario no puede estar vacío"),
   apiPass: z.string().min(1, "La contraseña no puede estar vacía"),
   location: z.string().optional(),

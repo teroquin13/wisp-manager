@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Plus, RadioTower, Activity } from "lucide-react";
 import prisma from "@/lib/prisma";
+import { AddRouterDialog } from "./add-router-dialog";
 
 export default async function RedPage() {
   const nodes = await prisma.routerNode.findMany({
@@ -20,10 +21,7 @@ export default async function RedPage() {
           <h1 className="text-3xl font-bold tracking-tight">Red y Nodos Router</h1>
           <p className="text-muted-foreground mt-1">Administra tus conexiones a MikroTik y puntos de acceso.</p>
         </div>
-        <Button className="gap-2">
-          <Plus className="h-4 w-4" />
-          Agregar Nodo
-        </Button>
+        <AddRouterDialog />
       </div>
 
       <div className="border rounded-md bg-card shadow-sm">
