@@ -13,8 +13,8 @@ export async function getRouterUptimeAndCpu(ipAddress: string, community = 'publ
     const oids = ["1.3.6.1.2.1.1.3.0", "1.3.6.1.2.1.25.3.3.1.2.1"];
     
     session.get(oids, function (error, varbinds) {
-      if (error) {
-        reject(error);
+      if (error || !varbinds) {
+        reject(error || new Error("Varbinds is undefined"));
       } else {
         const result: any = {};
         for (let i = 0; i < varbinds.length; i++) {

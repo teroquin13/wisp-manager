@@ -3,12 +3,12 @@ import prisma from "@/lib/prisma";
 import { ClienteSchema } from "@/lib/validations";
 import { auth } from "@/auth";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-    const { id } = await params;
+    const { id } = await context.params;
     const cliente = await prisma.customer.findUnique({ where: { id } });
 
     if (!cliente) {
@@ -22,12 +22,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-    const { id } = await params;
+    const { id } = await context.params;
     
     // Validate if exists
     const existing = await prisma.customer.findUnique({ where: { id } });
@@ -57,12 +57,12 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-    const { id } = await params;
+    const { id } = await context.params;
 
     const existing = await prisma.customer.findUnique({ where: { id } });
     if (!existing) {

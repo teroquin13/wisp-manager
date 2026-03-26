@@ -3,12 +3,12 @@ import prisma from "@/lib/prisma";
 import { FacturaSchema } from "@/lib/validations";
 import { auth } from "@/auth";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-    const { id } = await params;
+    const { id } = await context.params;
     const factura = await prisma.invoice.findUnique({ 
       where: { id },
       include: { customer: true, payments: true }
@@ -25,12 +25,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-    const { id } = await params;
+    const { id } = await context.params;
     const existing = await prisma.invoice.findUnique({ where: { id } });
     
     if (!existing) {
@@ -65,12 +65,12 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-    const { id } = await params;
+    const { id } = await context.params;
 
     const existing = await prisma.invoice.findUnique({ where: { id } });
     if (!existing) {

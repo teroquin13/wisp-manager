@@ -3,12 +3,12 @@ import prisma from "@/lib/prisma";
 import { getRouterUptimeAndCpu } from "@/lib/snmp";
 import { auth } from "@/auth";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const node = await prisma.routerNode.findUnique({ where: { id: params.id } });
+    const node = await prisma.routerNode.findUnique({ where: { id: (await context.params).id } });
     
     if (!node) {
       return NextResponse.json({ error: "Node not found" }, { status: 404 });
