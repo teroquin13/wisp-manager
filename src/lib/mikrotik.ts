@@ -5,9 +5,17 @@ export class MikrotikApi {
   private baseUrl: string;
   private authHeader: string;
 
-  constructor(ipAddress: string, user: string, pass: string, port = 443, useSsl = true) {
+  constructor(ipAddress: string, user: string, pass: string, port?: number, useSsl = true) {
+    let targetIp = ipAddress;
+    let targetPort = port || (useSsl ? 443 : 80);
+    if (ipAddress.includes(':')) {
+      const parts = ipAddress.split(':');
+      targetIp = parts[0];
+      targetPort = parseInt(parts[1], 10);
+      useSsl = false;
+    }
     const protocol = useSsl ? 'https' : 'http';
-    this.baseUrl = `${protocol}://${ipAddress}:${port}/rest`;
+    this.baseUrl = `${protocol}://${targetIp}:${targetPort}/rest`;
     this.authHeader = 'Basic ' + Buffer.from(`${user}:${pass}`).toString('base64');
   }
 

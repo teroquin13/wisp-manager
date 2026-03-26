@@ -5,7 +5,8 @@ import snmp from 'net-snmp';
  */
 export async function getRouterUptimeAndCpu(ipAddress: string, community = 'public') {
   return new Promise((resolve, reject) => {
-    const session = snmp.createSession(ipAddress, community);
+    const targetIp = ipAddress.includes(':') ? ipAddress.split(':')[0] : ipAddress;
+    const session = snmp.createSession(targetIp, community);
     
     // OIDs típicos de Mikrotik/Standard
     // 1.3.6.1.2.1.1.3.0 sysUpTime
